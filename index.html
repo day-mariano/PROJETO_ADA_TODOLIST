@@ -8,26 +8,30 @@
 </head>
 <body>
 
-  <h1>Lista de Tarefas</h1>
+  <main>
+    <h1>Lista de Tarefas</h1>
 
 
-  <div>
+  <div class="container barra">
     <input id="pesquisarTarefa" type="text" placeholder="Busque por uma tarefa">
     <button onclick="buscarTarefa(pesquisarTarefa.value)">Buscar</button>
+    <button onclick="mostrarTodasAsTarefas()">Todas as tarefas</button>
   </div>
 
-  <section>
+  <section class="container">
     <ul id="lista">
 
     </ul>
 
   </section>
 
-  <div>
+  <div class="container barra">
     <input id="novaTarefa" type="text" placeholder="Adicione uma nova tarefa">
-    <button onclick="adicionarTarefa()">Adicionar</button>
+    <button onclick="adicionarTarefa(novaTarefa.value)">Adicionar</button>
   </div>
 
+  </main>
+  
   <script src="app.js"></script>
 
 </body>

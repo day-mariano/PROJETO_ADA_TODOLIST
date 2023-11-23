@@ -16,11 +16,15 @@ function adicionarTarefa() {
     listaDeTarefas.push(novaTarefa);
 
     lista.innerHTML += `<li id="${id}">
-    <input type="checkbox" id="status">
-    <p>${novaTarefa.status}</p>
-    <p id="nomeTarefa">${novaTarefa.nome}</p>
-    <button onclick="editarTarefa(${id})">Editar</button>
-    <button onclick="removerTarefa(${id})">Apagar</button>
+    <div class="task-name">
+        <input class="check" type="checkbox" id="status" onchange="mudarStatus(${id})">
+        <p id="tarefa-${id}">ID:${id} - ${novaTarefa.nome}</p>
+    </div>
+    <div class="buttons">
+        <button id="btn-editar" onclick="editarTarefa(${id})"><img src="assets/editar-texto.png" width=20px; heigth=20px; /></button>
+        <button id="btn-apagar" onclick="removerTarefa(${id})"><img src="assets/trash.png" width=20px; heigth=20px; /></button>
+    </div>
+
     </li>` 
     
     tarefa.value = '';
@@ -43,21 +47,14 @@ function removerTarefa(id) {
 
 function editarTarefa(id) {
 
-    let tarefaEditada = prompt("Qual a nova tarefa?");
     const tarefaIndex = listaDeTarefas.findIndex((tarefa) => tarefa.id === id);
+    let tarefaEditada = prompt("Qual a nova tarefa?") ?? listaDeTarefas[tarefaIndex].nome;
+    
     listaDeTarefas[tarefaIndex].nome = tarefaEditada;
 
-    let tarefa = document.getElementById(id);
+    let tarefa = document.getElementById(`tarefa-${id}`);
 
-    tarefa.innerHTML = `<li id="${id}">
-    <input type="checkbox" id="status">
-    <p id="novaTarefa" type="text">${tarefaEditada}</p>
-    <button onclick="editarTarefa(${id})">Editar</button>
-    <button onclick="removerTarefa(${id})">Apagar</button>
-    </li>`
-
-    console.log(listaDeTarefas)
-    console.log(listaDeTarefas[tarefaIndex].nome)
+    tarefa.innerHTML = `ID:${id} - ${tarefaEditada}`
 
 }
 
@@ -65,63 +62,66 @@ function buscarTarefa(id) {
 
     id = parseInt(id)
     const tarefaIndex = listaDeTarefas.find((tarefa) => tarefa.id === id);
-
     let lista = document.getElementById("lista");
 
-    alert(listaDeTarefas[tarefaIndex])
+    if(tarefaIndex){
+        lista.innerHTML = `<li id="${id}">
+    <div class="task-name">
+        <input class="check" type="checkbox" id="status" onchange="mudarStatus(${id})">
+        <p id="tarefa-${id}">ID:${id} - ${tarefaIndex.nome}</p>
+    </div>
+    <div class="buttons">
+        <button id="btn-editar" onclick="editarTarefa(${id})"><img src="assets/editar-texto.png" width=20px; heigth=20px; /></button>
+        <button id="btn-apagar" onclick="removerTarefa(${id})"><img src="assets/trash.png" width=20px; heigth=20px; /></button>
+    </div>
 
-    console.log(id)
-    console.log(listaDeTarefas[tarefaIndex].nome)
-    
+    </li>` 
+        
+    }else{
+        alert("Esta tarefa não existe :(")
+    }
 
-    // lista.innerHTML = `<li id="${id}">
-    // <input type="checkbox" id="status">
-    // <p id="nomeTarefa">${listaDeTarefas[tarefaIndex].nome}</p>
-    // <button onclick="editarTarefa(${id})">Editar</button>
-    // <button onclick="removerTarefa(${id})">Apagar</button>
-    // </li>` 
+    let pesquisa = document.getElementById("pesquisarTarefa");
+    pesquisa.value = '';
 }
 
 
-const checkbox = document.getElementById('status')
 
-checkbox.addEventListener('change', (event) => {
+function mudarStatus(id){
 
-    let idPai = checkbox.parentElement.id;
+    const tarefaIndex = listaDeTarefas.findIndex((tarefa) => tarefa.id === id);
+    let texto = document.getElementById(`tarefa-${id}`);
     
-    const tarefaIndex = listaDeTarefas.findIndex((tarefa) => tarefa.id === idPai);
-
-    if (event.currentTarget.checked) {
     
-        listaDeTarefas[tarefaIndex].status = "concluído";
-    } else {
+    if (listaDeTarefas[tarefaIndex].status == "concluído") {
+    
         listaDeTarefas[tarefaIndex].status = "pendente";
+        texto.style.textDecoration = "none";
+    } else {
+        listaDeTarefas[tarefaIndex].status = "concluído";
+        texto.style.textDecoration = "line-through";
     }
-})
+
+}
 
 
+function mostrarTodasAsTarefas(){
 
-//   editarTarefa(id, novoNome, novoStatus) {
-//     const tarefaIndex = this.tarefas.findIndex((tarefa) => tarefa.id === id);
-//     if (tarefaIndex !== -1) {
-//       if (novoNome) {
-//         this.tarefas[tarefaIndex].nome = novoNome;
-//       }
-//       if (novoStatus) {
-//         this.tarefas[tarefaIndex].status = novoStatus;
-//       }
-//       return this.tarefas[tarefaIndex];
-//     }
-//     return null; // Tarefa não encontrada
-//   }
+    let lista = document.getElementById("lista");
+    lista.innerHTML = '';
 
+    for(let i = 0; i < listaDeTarefas.length ; i++){
 
+        lista.innerHTML += `<li id="${listaDeTarefas[i].id}">
+    <div class="task-name">
+        <input class="check" type="checkbox" id="status" onchange="mudarStatus(${listaDeTarefas[i].id})">
+        <p id="tarefa-${listaDeTarefas[i].id}">ID:${listaDeTarefas[i].id} - ${listaDeTarefas[i].nome}</p>
+    </div>
+    <div class="buttons">
+        <button id="btn-editar" onclick="editarTarefa(${listaDeTarefas[i].id})"><img src="assets/editar-texto.png" width=20px; heigth=20px; /></button>
+        <button id="btn-apagar" onclick="removerTarefa(${listaDeTarefas[i].id})"><img src="assets/trash.png" width=20px; heigth=20px; /></button>
+    </div>
 
-
-//   obterTarefa(id) {
-//     return this.tarefas.find((tarefa) => tarefa.id === id) || null;
-//   }
-
-
-
-
+    </li>` 
+    }
+}
